@@ -25,10 +25,11 @@
 #ifdef _WIN32
 #include "winStuff.h"
 #define CONFIG_FILE "\\furnace.cfg"
-#elif defined(__HAIKU__)
+#else
+#ifdef __HAIKU__
 #include <support/SupportDefs.h>
 #include <storage/FindDirectory.h>
-#else
+#endif
 #include <unistd.h>
 #include <pwd.h>
 #include <sys/stat.h>
@@ -42,17 +43,17 @@ void DivEngine::initConfDir() {
 #elif defined (IS_MOBILE)
   configPath=SDL_GetPrefPath();
 #else
-# ifdef __HAIKU__
+#  ifdef __HAIKU__
   char userSettingsDir[PATH_MAX];
-  status_t findUserDir = find_directory(B_USER_SETTINGS_DIRECTORY,NULL,false,userSettingsDir,PATH_MAX);
+  status_t findUserDir = find_directory(B_USER_SETTINGS_DIRECTORY,0,true,userSettingsDir,PATH_MAX);
   if (findUserDir==B_OK) {
     configPath=userSettingsDir;
   } else {
-    logW("unable to find/create user settings directory (%s)!",strerror(findUserDir);
+    logW("unable to find/create user settings directory (%s)!",strerror(findUserDir));
     configPath=".";
     return;
   }
-# else
+#  else
   // TODO this should check XDG_CONFIG_HOME first
   char* home=getenv("HOME");
   if (home==NULL) {
