@@ -176,7 +176,7 @@ jobs:
         elif [ '${{ matrix.config.compiler }}' == 'mingw' ]; then
           CMAKE_EXTRA_ARGS+=('-DCMAKE_TOOLCHAIN_FILE=scripts/Cross-MinGW-${{ steps.windows-identify.outputs.mingw-target }}.cmake')
           if [ '${{ matrix.config.arch }}' == 'x86' ]; then
-            CMAKE_EXTRA_ARGS+=('-DSUPPORT_XP=ON')
+            CMAKE_EXTRA_ARGS+=('-DSUPPORT_XP=ON' '-DWITH_RENDER_DX11=OFF')
           fi
         elif [ '${{ runner.os }}' == 'macOS' ]; then
           if [ '${{ matrix.config.arch }}' == 'arm64' ]; then
